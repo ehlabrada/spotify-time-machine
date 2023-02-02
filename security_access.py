@@ -15,26 +15,18 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
 SPOTIFY_BASE_URL = "https://api.spotify.com/v1/"
 
-# Create Playlist
-user_id = "ehlabrada"
-PLAYLIST_URL = f"users/{user_id}/playlists"
-
-
-# Setting the credentials Flow for accessing spotify
-# scope = "playlist-modify-public playlist-modify-private user-read-currently-playing"
-# auth_manager = SpotifyClientCredentials(CLIENT_ID, CLIENT_SECRET, "https://example.com", scope)
-# sp = spotipy.SpotifyOAuth(CLIENT_ID, CLIENT_SECRET, "https://example.com", scope=scope)
-
-
 class SpotifyAPI:
+
     def __init__(self):
         self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(CLIENT_ID, CLIENT_SECRET,
                                                             redirect_uri="https://example.com",
                                                             scope="playlist-modify-public"))
+        self.user_id = self.sp.current_user()["id"]
 
     # Create playlist
     def create_playlist(self, playlist_name):
-        self.sp.user_playlist_create(user_id, playlist_name, description="Musical Time Machine")
+
+        self.sp.user_playlist_create(self.user_id, playlist_name, description="Musical Time Machine")
 
     def search_songs_uri(self, songs: list):
 
